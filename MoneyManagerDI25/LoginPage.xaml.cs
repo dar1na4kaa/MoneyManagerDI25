@@ -31,7 +31,7 @@ namespace MoneyManagerX
         }
         private void Login_Button_Click(object sender, RoutedEventArgs e)
         {
-            if(ValidationHelper.IsNullOrWhiteSpace(LoginTextBox.Text) || ValidationHelper.IsNullOrWhiteSpace(PasswordTextBox.Password))
+            if (ValidationHelper.IsNullOrWhiteSpace(LoginTextBox.Text) || ValidationHelper.IsNullOrWhiteSpace(PasswordTextBox.Password))
             {
                 MessageBox.Show("Вы не ввели логин или пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -54,7 +54,7 @@ namespace MoneyManagerX
         }
         private void RegistrateTextLink(object sender, MouseButtonEventArgs e)
         {
-            NavigationService.Navigate(new RegistrationPage());
+            NavigationService.Navigate(new RegistrationPage(_dbcontext));
         }
     }
 }

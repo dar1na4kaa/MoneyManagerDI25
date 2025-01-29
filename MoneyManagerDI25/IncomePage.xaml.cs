@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
+using MoneyManagerX.Service;
 
 namespace MoneyManagerX
 {
@@ -22,11 +23,8 @@ namespace MoneyManagerX
     /// </summary>
     public partial class IncomePage : Page
     {
-        private readonly AccountingModel _dbcontext;
-
         public IncomePage(User _user)
         {
-
             InitializeComponent();
             pieChart.Series = new SeriesCollection()
             {

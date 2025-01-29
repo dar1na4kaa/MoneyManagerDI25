@@ -85,8 +85,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="IncomeWindow.xaml.cs">
-      <DependentUpon>IncomeWindow.xaml</DependentUpon>
+    <Compile Include="TransactionWindow.xaml.cs">
+      <DependentUpon>TransactionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Account.cs" />
     <Compile Include="AccountingDataSet.Designer.cs">
@@ -110,7 +110,7 @@
       <DependentUpon>RegistrationPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\AuthorizationService.cs" />
-    <Compile Include="Service\NotificationService.cs" />
+    <Compile Include="Service\TransactionService.cs" />
     <Compile Include="Service\ValidationHelper.cs" />
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -188,7 +188,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="IncomeWindow.xaml">
+    <Page Include="TransactionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

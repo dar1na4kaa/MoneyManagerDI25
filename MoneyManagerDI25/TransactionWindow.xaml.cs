@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoneyManagerX.Service;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -18,18 +19,26 @@ namespace MoneyManagerX
     /// <summary>
     /// Логика взаимодействия для IncomeWindow.xaml
     /// </summary>
-    public partial class IncomeWindow : Window
+    public partial class TransactionWindow : Window
     {
-        private readonly AccountingModel _database;
-        public IncomeWindow()
+        TransactionService transactionService;
+        public TransactionWindow(User user)
         {
             InitializeComponent();
-            _database = new AccountingModel();
+            transactionService = new TransactionService();
+
+            AccountBox.ItemsSource = user.Accounts;
+            CategoriesComboBox.DisplayMemberPath = "Name";
+            CategoriesComboBox.SelectedValuePath = "Id";
+
+            CategoriesComboBox.ItemsSource = user.Categories;
+            CategoriesComboBox.DisplayMemberPath = "Name"; 
+            CategoriesComboBox.SelectedValuePath = "Id";  
         }
 
         private void AddTransaction(object sender, RoutedEventArgs e)
         {
-            if (AccountBox.SelectedItem == null || CategoryBox.SelectedItem == null)
+            if (AccountBox.SelectedItem == null || CategoriesComboBox.SelectedItem == null)
             {
                 MessageBox.Show("Необходимо выбрать счет и категорию.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -61,7 +70,7 @@ namespace MoneyManagerX
             try
             {
                 var selectedAccount = (Account)AccountBox.SelectedItem;
-                var selectedCategory = (Category)CategoryBox.SelectedItem;
+                var selectedCategory = (Category)CategoriesComboBox.SelectedItem;
                 var transactionType = (ComboBoxItem)TypeBox.SelectedItem;
 
                 var transaction = new Transaction
@@ -71,18 +80,18 @@ namespace MoneyManagerX
                     Date = DatePicker.SelectedDate.Value,
                     Description = DescriptionBox.Text,
                     Amount = amount,
-                    Type = transactionType.Content.ToString().ToLower()
+                    Type = transactionType.Content.ToString()
                 };
-
-                _database.Transactions.Add(transaction);
+                using (var _dbcontext = new AccountingModel())
+                {
+                    _dbcontext.Transactions.Add(transaction);
+                }
                 MessageBox.Show("Транзакция успешно добавлена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Очистить поля после добавления
+                transactionService.RecalculateBalance(selectedAccount.Id, transactionType.Content.ToString(), amount);
                 DescriptionBox.Clear();
                 AmountBox.Clear();
                 DatePicker.SelectedDate = null;
-
-
             }
             catch (Exception ex)
             {

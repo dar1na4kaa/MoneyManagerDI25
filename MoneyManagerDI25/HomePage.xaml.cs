@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoneyManagerX.Service;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -21,14 +22,20 @@ namespace MoneyManagerX
     /// </summary>
     public partial class HomePage : Page
     {
-        private readonly AccountingModel _dbcontext;
         private readonly User _user;
+        private readonly TransactionService transactionService;
         public HomePage(User user)
         {
             InitializeComponent();
             _user = user;
-            _dbcontext = new AccountingModel();
+            transactionService = new TransactionService();
 
+            Account acc = _user.Accounts.First(x => x.Id == 1);
+            BalanceText.Text = acc.Balance.ToString();
+
+            IncomesListBox.ItemsSource = transactionService.GetIncomeForUser(_user.Id);
+
+            SpendingsListBox.ItemsSource = transactionService.GetSpendingForUser(_user.Id);
         }
 
         private void RefreshImageClick(object sender, MouseButtonEventArgs e)
@@ -36,19 +43,20 @@ namespace MoneyManagerX
           NavigationService.Navigate(new HomePage(_user));
         }
 
-        private void CreateTransaction(object sender, RoutedEventArgs e)
+        private void CreateAccount(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void AddIncome(object sender, RoutedEventArgs e)
+        private void AddTransaction(object sender, RoutedEventArgs e)
         {
-            
+            var transactionWin = new TransactionWindow(_user);
+            transactionWin.Show();
         }
 
-        private void AddSpending(object sender, RoutedEventArgs e)
+        private void RefreshPage(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.Refresh();
         }
     }
 }

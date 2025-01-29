@@ -23,10 +23,11 @@ namespace MoneyManagerX
     public partial class RegistrationPage : Page
     {
         private readonly AccountingModel _database;
-        public RegistrationPage()
+        public RegistrationPage(AccountingModel dbcontext)
         {
             InitializeComponent();
-            _database = new AccountingModel();
+            _database = dbcontext;
+            
         }
 
         private void CheckPasswordGenerate(object sender, RoutedEventArgs e)
@@ -57,18 +58,18 @@ namespace MoneyManagerX
             string password = PasswordTextBox.Text;
 
             if (!_database.Users.All(u => u.Login != login))
-            {
-                MessageBox.Show("Логин уже существует.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+                {
+                    MessageBox.Show("Логин уже существует.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
 
-            User user = new User
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Login = login,
-                PasswordHash = AuthorizationService.HashPassword(password),
-            };
+                User user = new User
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Login = login,
+                    PasswordHash = AuthorizationService.HashPassword(password),
+                };
 
             _database.Users.Add(user);
             _database.SaveChanges();

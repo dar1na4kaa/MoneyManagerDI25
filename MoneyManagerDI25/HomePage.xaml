@@ -30,21 +30,41 @@
                    FontSize="40px"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
-                   FontWeight="Bold"/>
-        <TextBlock Text="Доходы"
-                   Grid.Row="1"
-                   Grid.Column="0"
-                   Foreground="{StaticResource TextColor}"
-                   HorizontalAlignment="Center"
-                   FontSize="24px"
-                   />
-        <TextBlock Text="Расходы"
-                   Grid.Row="1"
-                   Grid.Column="1"
-                   Foreground="{StaticResource TextColor}"
-                   HorizontalAlignment="Center"
-                   FontSize="24px"
-                   />
+                   FontWeight="Bold"
+                   x:Name="BalanceText"/>
+            <ListBox Grid.Row="1" 
+                     Name="IncomesListBox"
+                     FontSize="24px"                     
+                     Foreground="{StaticResource ElementsColor}"
+                     Background="{StaticResource SecondaryColor}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Category}" />
+                            <TextBlock Text="{Binding Description}" />
+                            <TextBlock Text="{Binding Amount, StringFormat={}{0:C}}" />
+                            <TextBlock Text="{Binding Date, StringFormat={}{0:yyyy-MM-dd}}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ListBox Grid.Row="1"
+                     Grid.Column="1"
+                     Name="SpendingsListBox"
+                     FontSize="24px"
+                     Foreground="{StaticResource ElementsColor}"
+                     Background="{StaticResource SecondaryColor}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Category}" />
+                            <TextBlock Text="{Binding Description}" />
+                            <TextBlock Text="{Binding Amount, StringFormat={}{0:C}}" />
+                            <TextBlock Text="{Binding Date, StringFormat={}{0:yyyy-MM-dd}}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         <StackPanel Grid.Row="2"
                     Grid.ColumnSpan="2"
                     VerticalAlignment="Center"
@@ -59,9 +79,9 @@
                     FontWeight="Bold" 
                     Margin="30px 0 0 0"
                     Cursor="Hand"
-                    Click="CreateTransaction"
+                    Click="CreateAccount"
                     />
-            <Button Content="Добавить доход"
+                <Button Content="Добавить транзакция"
                     Width="300px"
                     Height="60px"
                     Background="{StaticResource ElementsColor}"
@@ -70,19 +90,20 @@
                     FontWeight="Bold"
                     Margin="30px 0 0 0"
                     Cursor="Hand"
-                    Click="AddIncome"
+                    Click="AddTransaction"
                     />
-            <Button Content="Добавить расход"
+                <Button Content="Обновить"
                     Width="300px"
                     Height="60px"
-                    Background="{StaticResource TextColor}"
-                    Foreground="{StaticResource ElementsColor}"
+                    Background="{StaticResource SecondaryColor}"
+                    Foreground="{StaticResource TextColor}"
                     FontSize="24px"
                     FontWeight="Bold"
                     Margin="30px 0 0 0"
                     Cursor="Hand"
-                    Click="AddSpending"/>
-        </StackPanel>
+                    Click="RefreshPage"
+                    />
+            </StackPanel>
     </Grid>
     </Grid>
 </Page>
