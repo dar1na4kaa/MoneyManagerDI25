@@ -1,0 +1,44 @@
+﻿<Window x:Class="MoneyManagerX.ManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MoneyManagerX"
+        mc:Ignorable="d"
+        Title="ManagerWindow" Height="1080" Width="1920"
+        WindowState="Maximized"
+        Background="{StaticResource PrimaryColor}"
+        FontFamily="Consolas">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100px"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0"
+                    Background="{StaticResource ElementsColor}">
+            <TextBlock Text="Меню"
+                       Foreground="{StaticResource SecondaryColor}"
+                       FontSize="24px"
+                       HorizontalAlignment="Center"
+                       Margin="0 10px 0 0"/>
+            <Image Source="/Images/home.png"
+                   Style="{StaticResource IconStyle}"
+                   MouseDown="HomeImageClick"/>
+                <Image Source="/Images/income.png"
+                       Width="60px"
+                       Style="{StaticResource IconStyle}" MouseDown="IncomeImageClick"/>
+                <Image Source="/Images/spending.png"
+                       Width="60px"
+                       Style="{StaticResource IconStyle}" MouseDown="SpendingsImageClick"/>
+                <Image Source="/Images/account.png"
+                       Width="60px"
+                       Style="{StaticResource IconStyle}" MouseDown="AccountImageClick"/>
+            <Image Source="/Images/settings.png"
+                       Width="60px"
+                       Style="{StaticResource IconStyle}" MouseDown="SettingsImageClick"/>
+        </StackPanel>
+        <Frame x:Name="ManagerFrame"
+               Grid.Column="1"
+               NavigationUIVisibility="Hidden"/>
+    </Grid>
+</Window>

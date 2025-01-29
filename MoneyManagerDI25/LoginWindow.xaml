@@ -1,0 +1,27 @@
+﻿<Window x:Class="MoneyManagerX.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MoneyManagerX"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="550" Width="800"
+        Background="{StaticResource PrimaryColor}"
+        FontFamily="Consolas">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60px"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Text="MoneyManager"
+                   VerticalAlignment="Center"
+                   Padding="10px 0 0 0"
+                   FontSize="36px"
+                   HorizontalAlignment="Center"
+                   Foreground="{StaticResource TextColor}"
+                   />
+
+        <Frame x:Name="LoginFrame" Grid.Row ="1" NavigationUIVisibility="Hidden"></Frame>
+    </Grid>
+</Window>

@@ -1,0 +1,76 @@
+﻿<Page x:Class="MoneyManagerX.IncomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MoneyManagerX"
+      xmlns:vlc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      mc:Ignorable="d" 
+      d:DesignHeight="1000" d:DesignWidth="1920"
+      Title="IncomePage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Доход"
+               FontSize="36px"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               Foreground="{StaticResource TextColor}"/>
+        <TextBlock Text="0,0 рублей"
+                   Grid.Column="1"
+               FontSize="36px"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               Foreground="{StaticResource TextColor}"/>
+        
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Доходы"
+                       HorizontalAlignment="Center"
+                       Height="100px"/>
+            <vlc:PieChart Name="pieChart"
+                          Height="600px"
+                          Margin="0 80px 0 0"/>
+        </StackPanel>
+        
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            VerticalAlignment="Center">
+            <Button Content="Выбрать период"
+                Width="300px"
+                Height="60px"
+                Background="{StaticResource ElementsColor}"
+                Foreground="{StaticResource PrimaryColor}"
+                FontSize="24px"
+                FontWeight="Bold" 
+                Margin="0 30px 0 0"
+                Cursor="Hand"/>
+            <Button Content="Добавить доход"
+                Width="300px"
+                Height="60px"
+                Background="{StaticResource ElementsColor}"
+                Foreground="{StaticResource PrimaryColor}"
+                FontSize="24px"
+                FontWeight="Bold"
+                Margin="0 30px 0 0"
+                Cursor="Hand"/>
+            <Button Content="Новая категория"
+                Width="300px"
+                Height="60px"
+                Background="{StaticResource ElementsColor}"
+                Foreground="{StaticResource PrimaryColor}"
+                FontSize="24px"
+                FontWeight="Bold"
+                Margin="0 30px 0 0"
+                Cursor="Hand"/>
+        </StackPanel>
+    </Grid>
+</Page>
