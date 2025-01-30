@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,28 +9,76 @@ namespace MoneyManagerX.Service
 {
     public class TransactionService
     {
-        public List<Transaction> GetIncomeForUser(int userId)
+        public void AddTransaction(int selectedAccount, int selectedCategory, DateTime selectedDate, decimal amount, string desc, string type)
+        {
+            var transaction = new Transaction
+            {
+                AccountId = selectedAccount,
+                CategoryId = selectedCategory,
+                Date = selectedDate,
+                Description = desc,
+                Amount = amount,
+                Type = type
+            };
+            using (var _dbcontext = new AccountingModel())
+            {
+                _dbcontext.Transactions.Add(transaction);
+                _dbcontext.SaveChanges();
+            }
+        }
+        public List<Transaction> GetIncomeForAccount(int accountId)
         {
             using (var _dbcontext = new AccountingModel())
             {
                 var incomeTransaction = _dbcontext.Transactions
-                                        .Where(c => c.AccountId == 1).Where(c => c.Type.Equals("Доход"))
+                                        .Where(c => c.AccountId == accountId).Where(c => c.Type.Equals("Доход"))
                                         .ToList();
 
                 return incomeTransaction;
             }
         }
-        public List<Transaction> GetSpendingForUser(int userId)
+        public List<Transaction> GetSpendingForAccount(int accountId)
         {
             using (var _dbcontext = new AccountingModel())
             {
                 var spendingTransaction = _dbcontext.Transactions
-                                        .Where(c => c.AccountId == 1).Where(c => c.Type.Equals("Расход"))
+                                        .Where(c => c.AccountId == accountId).Where(c => c.Type.Equals("Расход"))
                                         .ToList();
 
                 return spendingTransaction;
             }
         }
+        public List<Transaction> GetIncomeForUser(int accountId, DateTime startDate, DateTime endDate, List<string> selectedCategories = null)
+        {
+            using (var _db = new AccountingModel())
+            {
+                var incomes = _db.Transactions
+                                 .Where(t => t.AccountId == accountId &&
+                                             t.Date >= startDate &&
+                                             t.Date <= endDate &&
+                                             t.Amount > 0)
+                                 .ToList();
+
+                if (selectedCategories != null && selectedCategories.Any())
+                {
+                    incomes = incomes.Where(t => selectedCategories.Contains(t.Category.Name)).ToList();
+                }
+
+                return incomes.ToList();
+            }
+        }
+
+        public List<Transaction> GetSpendingForUser(int accId, DateTime startDate, DateTime endDate)
+        {
+            using (var db = new AccountingModel())
+            {
+                return db.Transactions
+                         .Where(t => t.AccountId == accId && t.Date >= startDate && t.Date <= endDate && t.Amount > 0 && t.Type.Equals("Расход"))
+                         .Include(t => t.Category)
+                         .ToList();
+            }
+        }
+
 
         public void RecalculateBalance(int accountId,string action,decimal amount)
         {

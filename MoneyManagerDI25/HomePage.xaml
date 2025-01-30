@@ -18,12 +18,15 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Основной счет"
+        <ComboBox  Width="500"
                    FontSize="36px"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
+                   Background="{StaticResource SecondaryColor}"
                    Foreground="{StaticResource TextColor}"
-                   Grid.ColumnSpan="2"/>
+                   Grid.ColumnSpan="2"
+                   x:Name="AccountsComboBox"
+                   SelectionChanged="AccountsComboBox_SelectionChanged"/>
         <TextBlock Text="0,0 рублей"
                    Grid.Column="1" 
                    Foreground="{StaticResource SecondaryColor}"
@@ -91,6 +94,17 @@
                     Margin="30px 0 0 0"
                     Cursor="Hand"
                     Click="AddTransaction"
+                    />
+                <Button Content="Добавить категорию"
+                    Width="300px"
+                    Height="60px"
+                    Background="{StaticResource ElementsColor}"
+                    Foreground="{StaticResource PrimaryColor}"
+                    FontSize="24px"
+                    FontWeight="Bold"
+                    Margin="30px 0 0 0"
+                    Cursor="Hand"
+                    Click="AddCategory"
                     />
                 <Button Content="Обновить"
                     Width="300px"

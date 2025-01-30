@@ -70,13 +70,54 @@ namespace MoneyManagerX
                     Login = login,
                     PasswordHash = AuthorizationService.HashPassword(password),
                 };
+              
 
             _database.Users.Add(user);
+
             _database.SaveChanges();
 
+            AddDefaultCategoriesForUser(user);
             MessageBox.Show("Пользователь успешно зарегистрирован!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             NavigationService.Navigate(new LoginPage());
         }
+        private void AddDefaultCategoriesForUser(User user)
+        {
+            var defaultCategories = new List<string>
+                {
+                    "Продукты",
+                    "Транспорт",
+                    "Развлечения",
+                    "Шоппинг",
+                    "Коммунальные услуги",
+                    "Одежда",
+                    "Здоровье",
+                    "Кредиты",
+                    "Зарплата",
+                    "Бизнес",
+                    "Инвестиции",
+                    "Подарки",
+                    "Проценты по вкладам"
+                };
+
+            using (var dbContext = new AccountingModel())
+            {
+                if (user == null)
+                {
+                    throw new Exception("Пользователь не найден");
+                }
+
+                foreach (var categoryName in defaultCategories)
+                {
+                    dbContext.Categories.Add(new Category
+                    {
+                        UserId = user.Id,
+                        Name = categoryName
+                    });
+                    dbContext.SaveChanges();
+                }
+            }
+        }
+        
 
         private void GoBackTextClick(object sender, MouseButtonEventArgs e)
         {

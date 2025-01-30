@@ -46,5 +46,6 @@ namespace MoneyManagerX.Service
 
             return Regex.IsMatch(input, pattern);
         }
+
     }
 }

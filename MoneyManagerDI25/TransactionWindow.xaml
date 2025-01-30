@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Background="{StaticResource PrimaryColor}"
         FontFamily="Consolas"
-        Title="TransactionWindow" Height="400" Width="450">
+        Title="TransactionWindow" Height="450" Width="450">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>

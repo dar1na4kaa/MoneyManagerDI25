@@ -27,8 +27,9 @@ namespace MoneyManagerX
             InitializeComponent();
             transactionService = new TransactionService();
 
-            AccountBox.ItemsSource = user.Accounts;
-            CategoriesComboBox.DisplayMemberPath = "Name";
+            var accounts = user.Accounts.ToList();
+            AccountBox.ItemsSource = accounts;
+            AccountBox.DisplayMemberPath = "Name";
             CategoriesComboBox.SelectedValuePath = "Id";
 
             CategoriesComboBox.ItemsSource = user.Categories;
@@ -73,19 +74,7 @@ namespace MoneyManagerX
                 var selectedCategory = (Category)CategoriesComboBox.SelectedItem;
                 var transactionType = (ComboBoxItem)TypeBox.SelectedItem;
 
-                var transaction = new Transaction
-                {
-                    AccountId = selectedAccount.Id,
-                    CategoryId = selectedCategory.Id,
-                    Date = DatePicker.SelectedDate.Value,
-                    Description = DescriptionBox.Text,
-                    Amount = amount,
-                    Type = transactionType.Content.ToString()
-                };
-                using (var _dbcontext = new AccountingModel())
-                {
-                    _dbcontext.Transactions.Add(transaction);
-                }
+                transactionService.AddTransaction(selectedAccount.Id, selectedCategory.Id, DatePicker.SelectedDate.Value,amount, DescriptionBox.Text, transactionType.Content.ToString());
                 MessageBox.Show("Транзакция успешно добавлена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 transactionService.RecalculateBalance(selectedAccount.Id, transactionType.Content.ToString(), amount);
