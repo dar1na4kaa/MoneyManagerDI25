@@ -46,10 +46,5 @@ namespace MoneyManagerX
         {
             ManagerFrame.Navigate(new AccountPage(_user));
         }
-
-        private void SettingsImageClick(object sender, MouseButtonEventArgs e)
-        {
-            ManagerFrame.Navigate(new SettingsPage(_user));
-        }
     }
 }

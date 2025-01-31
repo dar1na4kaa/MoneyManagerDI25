@@ -3,29 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using LiveCharts;
 using MoneyManagerX.Service;
 
 namespace MoneyManagerX
 {
     public partial class IncomePage : Page
     {
+        private ChartService _chartService;
         private TransactionService _transactionService;
         private CategoryService _categoryService;
         private User _user;
         private DateTime _startDate;
         private DateTime _endDate;
         private int? _selectedAccountId;
-        private List<Category> _selectedCategories;
 
         public IncomePage(User user)
         {
             InitializeComponent();
             _user = user;
             _transactionService = new TransactionService();
+            _chartService = new ChartService();
             _categoryService = new CategoryService();
             LoadAccounts();
             SetDefaultPeriod();
-            _selectedCategories = new List<Category>(); 
         }
 
         private void LoadAccounts()
@@ -93,22 +94,14 @@ namespace MoneyManagerX
 
         private void LoadIncomeData()
         {
+
             if (_selectedAccountId.HasValue)
             {
-                var selectedCategories = _selectedCategories; // Ваши выбранные категории
-                var incomes = _transactionService.GetIncomeForUser(selectedCategories, _startDate, _endDate);
+                TotalIncomeBlock.Text = _transactionService.GetAllTransactionBalance(_selectedAccountId.Value, "Доход") + " рублей";
 
-                pieChart.Series.Clear();
+                var incomes = _transactionService.GetTransactionsForUser(_selectedAccountId.Value, _startDate, _endDate, "Доход");
 
-                foreach (var income in incomes)
-                {
-                    pieChart.Series.Add(new LiveCharts.Wpf.PieSeries
-                    {
-                        Values = new LiveCharts.ChartValues<decimal> { income.Amount },
-                        Title = income.Category.Name,
-                        DataLabels = true
-                    });
-                }
+                _chartService.UpdatePieChart(pieChart, incomes);
             }
         }
 
@@ -118,16 +111,6 @@ namespace MoneyManagerX
         {
             TransactionWindow transactionWindow = new TransactionWindow(_user);
             transactionWindow.Show();
-        }
-
-        private void OnAddCategoryClick(object sender, RoutedEventArgs e)
-        {
-            var categorySelectionWindow = new CategorySelectionWindow(_user);
-            categorySelectionWindow.ShowDialog();
-
-            // Получаем выбранные категории и обновляем данные
-            _selectedCategories = categorySelectionWindow.GetSelectedCategories();
-            LoadIncomeData();
         }
     }
 }

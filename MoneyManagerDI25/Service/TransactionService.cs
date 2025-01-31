@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MoneyManagerX.Service
 {
@@ -26,59 +29,58 @@ namespace MoneyManagerX.Service
                 _dbcontext.SaveChanges();
             }
         }
-        public List<Transaction> GetIncomeForAccount(int accountId)
+        public List<Transaction> GetTransactionsForAccount(int accountId, string transactionType)
         {
-            using (var _dbcontext = new AccountingModel())
+            using (var dbContext = new AccountingModel())
             {
-                var incomeTransaction = _dbcontext.Transactions
-                                        .Where(c => c.AccountId == accountId).Where(c => c.Type.Equals("Доход"))
-                                        .ToList();
+                var transactions = dbContext.Transactions
+                    .Where(c => c.AccountId == accountId && c.Type.Equals(transactionType))
+                    .ToList();
 
-                return incomeTransaction;
+                return transactions;
             }
         }
-        public List<Transaction> GetSpendingForAccount(int accountId)
+        public List<Transaction> GetTransactionsForUser(int accountId, DateTime startDate, DateTime endDate, string transactionType)
         {
-            using (var _dbcontext = new AccountingModel())
+            using (var dbContext = new AccountingModel())
             {
-                var spendingTransaction = _dbcontext.Transactions
-                                        .Where(c => c.AccountId == accountId).Where(c => c.Type.Equals("Расход"))
-                                        .ToList();
+                var transactions = dbContext.Transactions
+                    .Where(i => i.AccountId == accountId && i.Date >= startDate && i.Date <= endDate && i.Amount > 0 && i.Type.Equals(transactionType))
+                    .Include(i => i.Category)
+                    .ToList();
 
-                return spendingTransaction;
-            }
-        }
-        public List<Transaction> GetIncomeForUser(int accountId, DateTime startDate, DateTime endDate, List<string> selectedCategories = null)
-        {
-            using (var _db = new AccountingModel())
-            {
-                var incomes = _db.Transactions
-                                 .Where(t => t.AccountId == accountId &&
-                                             t.Date >= startDate &&
-                                             t.Date <= endDate &&
-                                             t.Amount > 0)
-                                 .ToList();
+                var groupedTransactions = transactions
+                    .GroupBy(t => t.Category.Name)
+                    .Select(g => new
+                    {
+                        CategoryName = g.Key,
+                        TotalAmount = g.Sum(t => t.Amount)
+                    })
+                    .ToList();
 
-                if (selectedCategories != null && selectedCategories.Any())
+                var result = groupedTransactions.Select(g => new Transaction
                 {
-                    incomes = incomes.Where(t => selectedCategories.Contains(t.Category.Name)).ToList();
-                }
+                    Category = new Category { Name = g.CategoryName },
+                    Amount = g.TotalAmount,
+                    Type = transactionType
+                }).ToList();
 
-                return incomes.ToList();
+                return result;
             }
         }
-
-        public List<Transaction> GetSpendingForUser(int accId, DateTime startDate, DateTime endDate)
+        public decimal GetAllTransactionBalance(int accountId, string transactionType)
         {
-            using (var db = new AccountingModel())
+            decimal result = 0;
+            using (var _dbcontext = new AccountingModel())
             {
-                return db.Transactions
-                         .Where(t => t.AccountId == accId && t.Date >= startDate && t.Date <= endDate && t.Amount > 0 && t.Type.Equals("Расход"))
-                         .Include(t => t.Category)
-                         .ToList();
+                var transactions = _dbcontext.Transactions
+                                    .Where(i => i.AccountId == accountId && i.Type.Equals(transactionType))
+                                    .ToList();
+
+                return result = transactions
+                    .Sum(t => t.Amount);
             }
         }
-
 
         public void RecalculateBalance(int accountId,string action,decimal amount)
         {

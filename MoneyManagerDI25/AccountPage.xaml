@@ -9,5 +9,181 @@
       Title="AccountPage">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок страницы -->
+        <TextBlock Text="Профиль пользователя"
+                  Foreground="{StaticResource PrimaryColor}"
+                  FontSize="36"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  FontWeight="Bold"
+                  Margin="10"/>
+
+        <StackPanel Grid.Row="1"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Center"
+                    Width="400"
+                    x:Name="InfoPanel">
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Логин:"
+                           VerticalAlignment="Center"
+                           Width="100"
+                           FontSize="22"
+                           Foreground="{StaticResource TextColor}"/>
+                <TextBlock x:Name="LoginTextBlock"
+                           VerticalAlignment="Center"
+                           Width="200"
+                           FontSize="18"
+                           Text="Текущий логин"
+                           Foreground="{StaticResource TextColor}"
+                           TextAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Имя:"
+                           VerticalAlignment="Center"
+                           Width="100"
+                           FontSize="22"
+                           Foreground="{StaticResource TextColor}"/>
+                <TextBlock x:Name="FirstNameTextBlock"
+                           VerticalAlignment="Center"
+                           Width="200"
+                           FontSize="18"
+                           Text="Текущее имя"
+                           Foreground="{StaticResource TextColor}"
+                           TextAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Фамилия:"
+                           VerticalAlignment="Center"
+                           Width="100"
+                           FontSize="22"
+                           Foreground="{StaticResource TextColor}"/>
+                <TextBlock x:Name="LastNameTextBlock"
+                           VerticalAlignment="Center"
+                           Width="200"
+                           FontSize="18"
+                           Text="Текущая фамилия"
+                           TextAlignment="Center"
+                           Foreground="{StaticResource TextColor}"/>
+            </StackPanel>
+
+            <Button Content="Редактировать"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource SecondaryColor}"
+                    Foreground="White"
+                    Width="200"
+                    Height="40"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Margin="10"
+                    Click="EditButton_Click"/>
+            <Button Content="Выйти"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource SecondaryColor}"
+                    Foreground="White"
+                    Width="200"
+                    Height="40"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Margin="10"
+                    Click="Logout_Click"/>
+
+        </StackPanel>
+
+        <StackPanel x:Name="EditPanel" Grid.Row="1"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Center"
+                    Width="400"
+                    Visibility="Collapsed">
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Логин:"
+                           VerticalAlignment="Center"
+                           Width="200"
+                           FontSize="18"
+                           Foreground="{StaticResource TextColor}"/>
+                <TextBox x:Name="LoginTextBox"
+                         Width="200"
+                         FontSize="18"
+                         Margin="10,0"
+                         HorizontalAlignment="Left"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Имя:"
+                           VerticalAlignment="Center"
+                           Width="200"
+                           FontSize="18"
+                           Foreground="{StaticResource TextColor}"/>
+                <TextBox x:Name="FirstNameTextBox"
+                         Width="200"
+                         FontSize="18"
+                         Margin="10,0"
+                         HorizontalAlignment="Left"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Фамилия:"
+                           VerticalAlignment="Center"
+                           Width="200"
+                           FontSize="18"
+                           Foreground="{StaticResource TextColor}"/>
+                <TextBox x:Name="LastNameTextBox"
+                         Width="200"
+                         FontSize="18"
+                         Margin="10,0"
+                         HorizontalAlignment="Left"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Новый пароль:"
+                           VerticalAlignment="Center"
+                           Width="200"
+                           FontSize="18"
+                           Foreground="{StaticResource TextColor}"/>
+                <PasswordBox x:Name="NewPasswordBox"
+                             Width="200"
+                             FontSize="18"
+                             Margin="10,0"
+                             HorizontalAlignment="Left"/>
+            </StackPanel>
+
+            <!-- Подтверждение нового пароля -->
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Подтвердите пароль:"
+                           VerticalAlignment="Center"
+                           Width="200"
+                           FontSize="18"
+                           Foreground="{StaticResource TextColor}"/>
+                <PasswordBox x:Name="ConfirmPasswordBox"
+                             Width="200"
+                             FontSize="18"
+                             Margin="10,0"
+                             HorizontalAlignment="Left"/>
+            </StackPanel>
+            
+            <Button Content="Сохранить изменения"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource SecondaryColor}"
+                    Foreground="White"
+                    Width="200"
+                    Height="40"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Margin="10"
+                    Click="SaveButton_Click"/>
+        </StackPanel>
+
     </Grid>
 </Page>

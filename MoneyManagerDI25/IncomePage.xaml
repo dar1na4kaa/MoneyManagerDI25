@@ -29,6 +29,7 @@
                FontSize="36px"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
+               x:Name="TotalIncomeBlock"
                Foreground="{StaticResource TextColor}"/>
 
         <Grid Grid.Row="1">
@@ -112,16 +113,6 @@
                 Margin="0 30px 0 0"
                 Cursor="Hand"
                 Click="OnAddIncomeClick"/>
-            <Button Content="Новая категория"
-                Width="300px"
-                Height="60px"
-                Background="{StaticResource ElementsColor}"
-                Foreground="{StaticResource PrimaryColor}"
-                FontSize="24px"
-                FontWeight="Bold"
-                Margin="0 30px 0 0"
-                Cursor="Hand"
-                Click="OnAddCategoryClick"/>
         </StackPanel>
     </Grid>
 </Page>

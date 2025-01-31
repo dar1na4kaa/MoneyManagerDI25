@@ -4,15 +4,115 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MoneyManagerX"
+      xmlns:vlc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SpendingsPage">
+      d:DesignHeight="1000" d:DesignWidth="1920"
+      Title="IncomePage">
 
     <Grid>
-        <TextBlock Text="Страница расходов"
-             FontSize="36px"
-             VerticalAlignment="Center"
-             HorizontalAlignment="Center"
-             Foreground="{StaticResource TextColor}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Расход"
+               FontSize="36px"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               Foreground="{StaticResource TextColor}"/>
+        <TextBlock Text="0,0 рублей"
+                   Grid.Column="1"
+                   x:Name="TotalSpendingBlock"
+               FontSize="36px"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               Foreground="{StaticResource TextColor}"/>
+
+        <Grid Grid.Row="1">
+            <vlc:PieChart Name="pieChart"
+                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch"
+                  Margin="10"
+                  MaxHeight="400"/>
+        </Grid>
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            VerticalAlignment="Center">
+            <TextBlock Text="Выберите счет" 
+                       FontSize="30px"
+                       Padding="10"
+                       HorizontalAlignment="Center"
+                Background="{StaticResource ElementsColor}"
+                Foreground="{StaticResource PrimaryColor}" Width="302"/>
+            <ComboBox x:Name="AccountComboBox" 
+                      Width="300px" 
+                      Height="40px" 
+                      SelectionChanged="AccountComboBox_SelectionChanged"
+                Background="{StaticResource ElementsColor}"
+                Foreground="{StaticResource PrimaryColor}"
+                FontSize="24px"
+                FontWeight="Bold" 
+                Margin="0 30px 0 0"
+                Cursor="Hand">
+            </ComboBox>
+            <TextBlock Text="Выберите период"
+                       FontSize="30px"
+                       Padding="10"
+                        Margin="0 30px 0 0"
+                       HorizontalAlignment="Center"
+                Background="{StaticResource ElementsColor}"
+                Foreground="{StaticResource PrimaryColor}" Width="293"                       />
+            <ComboBox x:Name="PeriodComboBox" 
+                      Width="300px" 
+                      Height="40px" 
+                      SelectionChanged="PeriodComboBox_SelectionChanged"
+                Background="{StaticResource ElementsColor}"
+                Foreground="{StaticResource PrimaryColor}"
+                FontSize="24px"
+                FontWeight="Bold" 
+                Margin="0 30px 0 0"
+                Cursor="Hand">
+                <ComboBoxItem Content="Последняя неделя" Tag="7"/>
+                <ComboBoxItem Content="Последний месяц" Tag="30"/>
+                <ComboBoxItem Content="Последний год" Tag="365"/>
+                <ComboBoxItem Content="Произвольный период" Tag="custom"/>
+            </ComboBox>
+
+            <StackPanel Orientation="Horizontal" 
+                        x:Name="CustomDatePanel"
+                        Visibility="Collapsed"
+                        Margin="0 30px 0 0"
+                      Width="450px" 
+                      Height="40px" >
+                <DatePicker x:Name="StartDatePicker" VerticalAlignment="Center" Width="140px"/>
+                <DatePicker x:Name="EndDatePicker" VerticalAlignment="Center" Width="140px"/>
+                <Button Content="Применить"
+                        Click="ApplyCustomPeriod"
+                        Width="150px"
+                        Height="20px"
+                        Background="{StaticResource ElementsColor}"
+                        Foreground="{StaticResource PrimaryColor}"
+                        FontSize="10px"
+                        FontWeight="Bold"
+                        Margin="5"
+                        Cursor="Hand"/>
+            </StackPanel>
+            <Button Content="Добавить доход"
+                Width="300px"
+                Height="60px"
+                Background="{StaticResource ElementsColor}"
+                Foreground="{StaticResource PrimaryColor}"
+                FontSize="24px"
+                FontWeight="Bold"
+                Margin="0 30px 0 0"
+                Cursor="Hand"
+                Click="OnAddSpendingClick"/>
+        </StackPanel>
     </Grid>
 </Page>

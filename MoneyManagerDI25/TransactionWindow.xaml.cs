@@ -21,20 +21,20 @@ namespace MoneyManagerX
     /// </summary>
     public partial class TransactionWindow : Window
     {
-        TransactionService transactionService;
+        private UserService _userService;
+        private TransactionService transactionService;
+
         public TransactionWindow(User user)
         {
             InitializeComponent();
+            _userService = new UserService(user);
             transactionService = new TransactionService();
 
             var accounts = user.Accounts.ToList();
             AccountBox.ItemsSource = accounts;
             AccountBox.DisplayMemberPath = "Name";
-            CategoriesComboBox.SelectedValuePath = "Id";
-
             CategoriesComboBox.ItemsSource = user.Categories;
-            CategoriesComboBox.DisplayMemberPath = "Name"; 
-            CategoriesComboBox.SelectedValuePath = "Id";  
+            CategoriesComboBox.DisplayMemberPath = "Name";
         }
 
         private void AddTransaction(object sender, RoutedEventArgs e)
@@ -50,11 +50,13 @@ namespace MoneyManagerX
                 MessageBox.Show("Некорректный формат суммы.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
             if (string.IsNullOrWhiteSpace(DescriptionBox.Text))
             {
                 MessageBox.Show("Описание не может быть пустым", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
             if (DatePicker.SelectedDate == null)
             {
                 MessageBox.Show("Необходимо выбрать дату.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -67,17 +69,17 @@ namespace MoneyManagerX
                 return;
             }
 
-
             try
             {
                 var selectedAccount = (Account)AccountBox.SelectedItem;
                 var selectedCategory = (Category)CategoriesComboBox.SelectedItem;
                 var transactionType = (ComboBoxItem)TypeBox.SelectedItem;
 
-                transactionService.AddTransaction(selectedAccount.Id, selectedCategory.Id, DatePicker.SelectedDate.Value,amount, DescriptionBox.Text, transactionType.Content.ToString());
+                transactionService.AddTransaction(selectedAccount.Id, selectedCategory.Id, DatePicker.SelectedDate.Value, amount, DescriptionBox.Text, transactionType.Content.ToString());
+                transactionService.RecalculateBalance(selectedAccount.Id, transactionType.Content.ToString(), amount);
+
                 MessageBox.Show("Транзакция успешно добавлена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                transactionService.RecalculateBalance(selectedAccount.Id, transactionType.Content.ToString(), amount);
                 DescriptionBox.Clear();
                 AmountBox.Clear();
                 DatePicker.SelectedDate = null;

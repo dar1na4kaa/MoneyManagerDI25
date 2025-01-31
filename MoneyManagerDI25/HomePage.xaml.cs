@@ -22,97 +22,73 @@ namespace MoneyManagerX
     /// </summary>
     public partial class HomePage : Page
     {
-        private readonly User _user;
-        private readonly TransactionService transactionService;
+        private User _user;
+        private UserService _userService;
+        private AccountService _accountService;
+
         public HomePage(User user)
         {
             InitializeComponent();
             _user = user;
-            transactionService = new TransactionService();
+            _userService = new UserService(_user);
+            _accountService = new AccountService();
 
-            AccountsComboBox.ItemsSource = _user.Accounts;
+            AccountsComboBox.ItemsSource = user.Accounts;
             AccountsComboBox.DisplayMemberPath = "Name";
             AccountsComboBox.SelectedValuePath = "Id";
-
         }
-
-        private void RefreshImageClick(object sender, MouseButtonEventArgs e)
+        private void LoadUserData()
         {
-            NavigationService.Navigate(new HomePage(_user));
-        }
-
-
-        private void CreateAccount(object sender, RoutedEventArgs e)
-        {
-            AccountWindow accountWindow = new AccountWindow(_user);
-            accountWindow.Show();
-        }
-
-
-        private void AddTransaction(object sender, RoutedEventArgs e)
-        {
-            var transactionWin = new TransactionWindow(_user);
-            transactionWin.Show();
+            _user = _userService.GetUserById(_user.Id); 
+            if (_user != null)
+            {
+                AccountsComboBox.ItemsSource = _user.Accounts;
+                AccountsComboBox.DisplayMemberPath = "Name";
+                AccountsComboBox.SelectedValuePath = "Id";
+            }
         }
 
         public void RefreshPage(object sender, RoutedEventArgs e)
         {
-            RefreshAccountsList();
+            LoadUserData(); 
+            _userService.RefreshAccountsList(AccountsComboBox, BalanceText, IncomesListBox, SpendingsListBox);
         }
 
-        private void RefreshAccountsList()
+        private void CreateAccount(object sender, RoutedEventArgs e)
         {
-            using (var dbContext = new AccountingModel())
-            {
-                var userAccounts = dbContext.Accounts.Where(a => a.UserId == _user.Id).ToList();
-                if (!userAccounts.Any())
-                {
-                    MessageBox.Show("У пользователя нет счетов. Добавьте первый счет", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    AccountsComboBox.ItemsSource = null;
-                    BalanceText.Text = "0";
-                    IncomesListBox.ItemsSource = null;
-                    SpendingsListBox.ItemsSource = null;
-                    return;
-                }
+            AccountWindow accountPage = new AccountWindow(_user);
+            accountPage.Show();
 
-                AccountsComboBox.ItemsSource = userAccounts;
-                AccountsComboBox.SelectedIndex = 0; 
-            }
+            _userService.RefreshAccountsList(AccountsComboBox, BalanceText, IncomesListBox, SpendingsListBox);
+            LoadUserData();
         }
 
         private void AccountsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            using (var dbContext = new AccountingModel())
+            if (AccountsComboBox.SelectedItem is Account selectedAccount)
             {
-                if (AccountsComboBox.SelectedItem is Account selectedAccount)
-                {
-                    RefreshTransaction(selectedAccount.Id);
-                }
-                else
-                {
-                    BalanceText.Text = "0";
-                    IncomesListBox.ItemsSource = null;
-                    SpendingsListBox.ItemsSource = null;
-                }
+                _userService.RefreshTransaction(selectedAccount.Id, BalanceText, IncomesListBox, SpendingsListBox);
+            }
+            else
+            {
+                BalanceText.Text = "0";
+                IncomesListBox.ItemsSource = null;
+                SpendingsListBox.ItemsSource = null;
             }
         }
 
-        private void RefreshTransaction(int accountId)
+        private void AddTransaction(object sender, RoutedEventArgs e)
         {
-            using (var dbContext = new AccountingModel())
-            {
-                var account = dbContext.Accounts.AsNoTracking().FirstOrDefault(a => a.Id == accountId);
-
-                BalanceText.Text = account?.Balance.ToString() ?? "0";
-                IncomesListBox.ItemsSource = transactionService.GetIncomeForAccount(accountId);
-                SpendingsListBox.ItemsSource = transactionService.GetSpendingForAccount(accountId);
-            }
+            TransactionWindow transactionWindow = new TransactionWindow(_user);
+            transactionWindow.Show();
+            LoadUserData();
         }
 
         private void AddCategory(object sender, RoutedEventArgs e)
         {
             CategoryWindow categoryWindow = new CategoryWindow(_user);
             categoryWindow.Show();
+            LoadUserData();
         }
     }
 }

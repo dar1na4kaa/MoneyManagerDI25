@@ -84,7 +84,7 @@
                     Cursor="Hand"
                     Click="CreateAccount"
                     />
-                <Button Content="Добавить транзакция"
+                <Button Content="Добавить транзакцию"
                     Width="300px"
                     Height="60px"
                     Background="{StaticResource ElementsColor}"

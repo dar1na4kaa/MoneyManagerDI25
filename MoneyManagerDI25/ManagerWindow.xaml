@@ -30,12 +30,9 @@
                 <Image Source="/Images/spending.png"
                        Width="60px"
                        Style="{StaticResource IconStyle}" MouseDown="SpendingsImageClick"/>
-                <Image Source="/Images/account.png"
+            <Image Source="/Images/account.png"
                        Width="60px"
                        Style="{StaticResource IconStyle}" MouseDown="AccountImageClick"/>
-            <Image Source="/Images/settings.png"
-                       Width="60px"
-                       Style="{StaticResource IconStyle}" MouseDown="SettingsImageClick"/>
         </StackPanel>
         <Frame x:Name="ManagerFrame"
                Grid.Column="1"

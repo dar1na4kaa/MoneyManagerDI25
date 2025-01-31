@@ -51,6 +51,9 @@ namespace MoneyManagerX
 
             ManagerWindow window = new ManagerWindow(user);
             window.Show();
+
+            var parentWindow = Window.GetWindow(this);
+            parentWindow.Close();
         }
         private void RegistrateTextLink(object sender, MouseButtonEventArgs e)
         {
